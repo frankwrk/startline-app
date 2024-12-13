@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@repo/env": "workspace:*",
-    "basehub": "^7.5.28",
+    "basehub": "^7.5.30",
     "react": "^19.0.0"
   },
   "devDependencies": {
