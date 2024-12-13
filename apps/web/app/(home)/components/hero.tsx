@@ -1,7 +1,6 @@
 import { blog } from '@repo/cms';
 import { Feed } from '@repo/cms/components/feed';
 import { Button } from '@repo/design-system/components/ui/button';
-import { env } from '@repo/env';
 import { MoveRight, PhoneCall } from 'lucide-react';
 import { draftMode } from 'next/headers';
 import Link from 'next/link';
@@ -14,10 +13,13 @@ export const Hero = async () => {
       <div className="container mx-auto">
         <div className="flex flex-col items-center justify-center gap-8 py-20 lg:py-40">
           <div>
-            <Feed queries={[blog.latestPostQuery]} draft={draft.isEnabled}>
+            <Feed queries={[blog.postsQuery]} draft={draft.isEnabled}>
               {/* biome-ignore lint/suspicious/useAwait: "Server Actions must be async" */}
               {async ([data]) => {
                 'use server';
+
+                const latestPost = data.blog.posts.items[0];
+                if (!latestPost) return null;
 
                 return (
                   <Button
@@ -26,7 +28,7 @@ export const Hero = async () => {
                     className="gap-4"
                     asChild
                   >
-                    <Link href={`/blog/${data.blog.posts.items.at(0)?._slug}`}>
+                    <Link href={`/blog/${latestPost._slug}`}>
                       Read our latest article <MoveRight className="h-4 w-4" />
                     </Link>
                   </Button>
@@ -34,27 +36,29 @@ export const Hero = async () => {
               }}
             </Feed>
           </div>
-          <div className="flex flex-col gap-4">
-            <h1 className="max-w-2xl text-center font-regular text-5xl tracking-tighter md:text-7xl">
-              This is the start of something new
-            </h1>
-            <p className="max-w-2xl text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl">
-              Managing a small business today is already tough. Avoid further
-              complications by ditching outdated, tedious trade methods. Our
-              goal is to streamline SMB trade, making it easier and faster than
-              ever.
-            </p>
-          </div>
-          <div className="flex flex-row gap-3">
-            <Button size="lg" className="gap-4" variant="outline" asChild>
+
+          <h1 className="text-balance text-center text-4xl font-bold tracking-tight lg:text-6xl">
+            Discover the'Future of font-bold '
+            <span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
+              Startup Funding
+            </span>
+          </h1>
+
+          <p className="text-balance text-center text-lg text-muted-foreground lg:text-xl">
+            Streamline your startup&apos;s fundraising process with our
+            comprehensive platform. Get started today and take control of your
+            fundraising journey.
+          </p>
+
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <Button asChild>
               <Link href="/contact">
-                Get in touch <PhoneCall className="h-4 w-4" />
+                <PhoneCall className="mr-2 h-4 w-4" />
+                Schedule a Demo
               </Link>
             </Button>
-            <Button size="lg" className="gap-4" asChild>
-              <Link href={env.NEXT_PUBLIC_APP_URL}>
-                Sign up <MoveRight className="h-4 w-4" />
-              </Link>
+            <Button variant="outline" asChild>
+              <Link href="/pricing">View Pricing</Link>
             </Button>
           </div>
         </div>
